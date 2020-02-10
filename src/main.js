@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import less from 'less'
-import ElementUI, { Message } from 'element-ui'
+import ElementUI, { Message, MessageBox } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import global from './assets/css/global.css'
 import axios from 'axios'
@@ -24,6 +24,7 @@ axios.interceptors.request.use(config => {
 })
 Vue.prototype.$http = axios
 Vue.prototype.$message = Message
+Vue.prototype.$confirm = MessageBox.confirm
 
 /* eslint-disable no-new */
 new Vue({
