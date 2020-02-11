@@ -317,11 +317,14 @@ export default {
         return this.$message.info('已取消删除')
       }
 
+      // 发起删除用户信息的数据请求
       const {data: res} = await this.$http.delete('users/' + id)
       if (res.meta.status !== 200) {
         return this.$message.error('删除用户失败！')
       }
+      // 提示删除成功
       this.$message.success('删除用户成功！')
+      // 更新数据列表
       this.getUserList()
     }
   }
