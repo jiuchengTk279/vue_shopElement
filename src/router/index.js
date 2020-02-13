@@ -32,6 +32,10 @@ const router = new Router({
         {
           path: '/roles',
           component: () => import('../components/power/Roles.vue')
+        },
+        {
+          path: '/orders',
+          component: () => import('../components/order/Order.vue')
         }
       ]
     }
