@@ -34,6 +34,10 @@ const router = new Router({
           component: () => import('../components/power/Roles.vue')
         },
         {
+          path: '/categories',
+          component: () => import('../components/goods/Categories.vue')
+        },
+        {
           path: '/orders',
           component: () => import('../components/order/Order.vue')
         },

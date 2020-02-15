@@ -8,6 +8,7 @@ import ElementUI, { Message, MessageBox } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import global from './assets/css/global.css'
 import axios from 'axios'
+import TreeTable from 'vue-table-with-tree-grid'
 
 Vue.use(ElementUI)
 Vue.use(less)
@@ -25,6 +26,8 @@ axios.interceptors.request.use(config => {
 Vue.prototype.$http = axios
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
+// 注册 tree-table组件
+Vue.component('tree-table', TreeTable)
 
 /* eslint-disable no-new */
 new Vue({
