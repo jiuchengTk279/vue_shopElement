@@ -44,6 +44,10 @@ const router = new Router({
         {
           path: '/reports',
           component: () => import('../components/report/Report.vue')
+        },
+        {
+          path: '/goods',
+          component: () => import('../components/goods/List.vue')
         }
       ]
     }
