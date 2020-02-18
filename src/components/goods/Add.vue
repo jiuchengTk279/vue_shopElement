@@ -56,11 +56,31 @@
                             <el-input v-model="item.attr_vals"></el-input>
                         </el-form-item>
                     </el-tab-pane>
-                    <el-tab-pane label="商品图片" name='3'>商品图片</el-tab-pane>
+                    <el-tab-pane label="商品图片" name='3'>
+                        <!-- action 表示图片要上传的后台API地址 -->
+                        <!-- headers 设置上传的请求头部 -->
+                        <el-upload
+                            :action="uploadUrl"
+                            :on-preview="handlePreview"
+                            :on-remove="handleRemove"
+                            list-type="picture"
+                            :headers="headerObj"
+                            :on-success="handleSuccess">
+                            <el-button size="small" type="primary">点击上传</el-button>
+                        </el-upload>
+                    </el-tab-pane>
                     <el-tab-pane label="商品内容" name='4'>商品内容</el-tab-pane>
                 </el-tabs>
             </el-form>
         </el-card>
+
+        <!-- 控制图片预览的对话框 -->
+        <el-dialog
+            title="图片预览"
+            :visible.sync="previewDialogVisible"
+            width="50%">
+            <img :src="previewPath"  alt="" class="previewImg"/>
+        </el-dialog>
     </div>
 </template>
 
@@ -80,7 +100,9 @@ export default {
         // 商品数量
         goods_number: 0,
         // 商品所属的分类数组
-        goods_cat: []
+        goods_cat: [],
+        // 图片的数组
+        pics: []
       },
       // 添加商品的表单的验证规则
       addFormRules: {
@@ -114,7 +136,17 @@ export default {
       // 动态参数列表数据
       manyTableData: [],
       // 静态参数列表数据
-      onlyTableData: []
+      onlyTableData: [],
+      // 上传图片的地址
+      uploadUrl: 'http://127.0.0.1:8888/api/private/v1/upload',
+      // 设置图片上传组件的headers请求头对象
+      headerObj: {
+        Authorization: window.sessionStorage.getItem('token')
+      },
+      // 图片预览的路径
+      previewPath: '',
+      // 控制图片预览对话框的显示与隐藏
+      previewDialogVisible: false
     }
   },
   created() {
@@ -175,6 +207,31 @@ export default {
         // 将响应获得的数据赋值给静态参数列表数据
         this.onlyTableData = res.data
       }
+    },
+    // 处理图片预览效果
+    handlePreview (file) {
+      console.log(file)
+      this.previewPath = file.response.data.url
+      this.previewDialogVisible = true
+    },
+    // 处理图片移除的操作
+    handleRemove (file) {
+      console.log(file)
+      // 获取将要删除图片的临时路径
+      const filePath = file.response.data.tmp_path
+      // 从pics数组中，找到这个图片的对应索引值
+      const i = this.addForm.pics.findIndex(x => x.index === filePath)
+      // 调用数组的splice方法，把图片信息对象从pics数组中移除
+      this.addForm.pics.splice(i, 1)
+    },
+    // 监听图片上传成功的事件
+    handleSuccess (response) {
+      console.log(response)
+      // 拼接得到一个图片信息对象
+      const picInfo = {pic: response.data.tmp_path}
+      // 将图片信息对象品push到pics数组中
+      this.addForm.pics.push(picInfo)
+      console.log(this.addForm)
     }
   },
   computed: {
@@ -196,5 +253,8 @@ export default {
 }
 .el-checkbox {
   margin: 0 10px 0 0 !important;
+}
+.previewImg {
+  width: 100%;
 }
 </style>
