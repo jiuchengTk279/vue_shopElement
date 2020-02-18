@@ -69,7 +69,12 @@
                             <el-button size="small" type="primary">点击上传</el-button>
                         </el-upload>
                     </el-tab-pane>
-                    <el-tab-pane label="商品内容" name='4'>商品内容</el-tab-pane>
+                    <el-tab-pane label="商品内容" name='4'>
+                        <!-- 富文本编辑器组件 -->
+                        <quill-editor v-model="addForm.goods_introduce"></quill-editor>
+                        <!-- 添加商品的按钮 -->
+                        <el-button type="primary" class="btnAdd" @click="addGood">添加商品</el-button>
+                    </el-tab-pane>
                 </el-tabs>
             </el-form>
         </el-card>
@@ -85,6 +90,9 @@
 </template>
 
 <script>
+// 引入lodash库
+import _ from 'lodash'
+
 export default {
   data() {
     return {
@@ -102,7 +110,11 @@ export default {
         // 商品所属的分类数组
         goods_cat: [],
         // 图片的数组
-        pics: []
+        pics: [],
+        // 商品的介绍文本，也就是富文本编辑器的内容
+        goods_introduce: '',
+        // 商品的参数数组，包含动态参数和静态参数
+        attrs: []
       },
       // 添加商品的表单的验证规则
       addFormRules: {
@@ -232,6 +244,53 @@ export default {
       // 将图片信息对象品push到pics数组中
       this.addForm.pics.push(picInfo)
       console.log(this.addForm)
+    },
+    // 添加商品的方法
+    addGood () {
+      // 添加表单前的预校验
+      this.$refs.addFormRef.validate(async valid => {
+        if (!valid) {
+          return this.$message.error('请填写必要的表单项！')
+        }
+        // 执行添加的业务逻辑
+        // 将goods_cat从数组转换为字符串，通过join('')方法，但是级联选择器的内容必须是数组，可以先将表单数据深拷贝一份，再将拷贝后的表单转换为字符串，不影响
+        // 深拷贝采用的是 lodash 中的 cloonDeep(obj)
+        const form = _.cloonDeep(this.addForm)
+        form.goods_cat = form.goods_cat.join(',')
+        // 处理动态参数属性
+        // 对manyTableData进行forEach遍历
+        this.manyTableData.forEach(item => {
+          const newInfo = {
+            attr_id: item.attr_id,
+            attr_value: item.attr_vals.join('')
+          }
+          // 将newInfo添加到addForm.attrs属性中
+          this.addForm.attrs.push(newInfo)
+        })
+        // 处理静态参数属性
+        // 对onlyTableData 进行forEach遍历
+        this.onlyTableData.forEach(item => {
+          const newInfo = {
+            attr_id: item.attr_id,
+            attr_value: item.attr_vals
+          }
+          // 将newInfo 添加到 addForm.attrs属性中
+          this.addForm.attrs.push(newInfo)
+        })
+        // 将addForm.attrs属性 赋值给深拷贝后的form表单的attrs属性
+        form.attrs = this.addForm.attrs
+        console.log(form)
+
+        // 发起请求，添加商品
+        // 商品的名称， 必须是唯一的
+        const {data: res} = await this.$http.post('goods', form)
+        if (res.meta.status !== 201) {
+          return this.$message.error('添加商品失败！')
+        }
+        this.$message.success('添加商品成功！')
+        // 添加成功后，跳转到商品列表页
+        this.$router.push('/goods')
+      })
     }
   },
   computed: {
@@ -256,5 +315,8 @@ export default {
 }
 .previewImg {
   width: 100%;
+}
+.btnAdd {
+  margin-top: 15px;
 }
 </style>
