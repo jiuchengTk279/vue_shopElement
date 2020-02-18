@@ -48,6 +48,10 @@ const router = new Router({
         {
           path: '/goods',
           component: () => import('../components/goods/List.vue')
+        },
+        {
+          path: '/goods/addGoods',
+          component: () => import('../components/goods/Add.vue')
         }
       ]
     }
