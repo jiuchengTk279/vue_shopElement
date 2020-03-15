@@ -73,7 +73,7 @@
                         <!-- 富文本编辑器组件 -->
                         <quill-editor v-model="addForm.goods_introduce"></quill-editor>
                         <!-- 添加商品的按钮 -->
-                        <el-button type="primary" class="btnAdd" @click="addGood">添加商品</el-button>
+                        <el-button type="primary" class="btnAdd" @click="addGood()">添加商品</el-button>
                     </el-tab-pane>
                 </el-tabs>
             </el-form>

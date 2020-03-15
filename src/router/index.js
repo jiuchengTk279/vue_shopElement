@@ -52,6 +52,10 @@ const router = new Router({
         {
           path: '/goods/addGoods',
           component: () => import('../components/goods/Add.vue')
+        },
+        {
+          path: '/params',
+          component: () => import('../components/goods/Params.vue')
         }
       ]
     }
