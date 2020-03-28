@@ -12,13 +12,13 @@ import TreeTable from 'vue-table-with-tree-grid'
 // 导入富文本编辑器
 import vueQuillEditor from 'vue-quill-editor'
 // require styles 导入富文本编辑器对应的样式
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+// import 'quill/dist/quill.core.css'
+// import 'quill/dist/quill.snow.css'
+// import 'quill/dist/quill.bubble.css'
 
 // 导入 nprogress 包对应的js和css
 import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+// import 'nprogress/nprogress.css'
 
 Vue.use(ElementUI)
 Vue.use(less)
